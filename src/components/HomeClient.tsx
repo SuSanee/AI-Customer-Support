@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { AnimatePresence, motion } from "motion/react";
+import { useRouter } from "next/navigation";
 import { title } from "process";
 import { useEffect, useRef, useState } from "react";
 
@@ -20,6 +21,7 @@ export default function HomeClient({ email }: { email: string }) {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+  const navigate = useRouter();
 
   const features = [
     {
@@ -44,6 +46,10 @@ export default function HomeClient({ email }: { email: string }) {
     }
   };
 
+  const handleRedirectToDashboard = () => {
+    navigate.push("/dashboard");
+  };
+
   return (
     <div className="min-h-screen bg-linear-to-br from-white to-zinc-50 text-zinc-900 overfow-x-hidden">
       <motion.div
@@ -54,7 +60,7 @@ export default function HomeClient({ email }: { email: string }) {
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="text-lg font-semibold tracking-tight">
-            Support <span className="text-zinc-400">AI</span>
+            Snippet <span className="text-zinc-400">AI</span>
           </div>
           {email ? (
             <div className="relative" ref={popupRef}>
@@ -70,9 +76,12 @@ export default function HomeClient({ email }: { email: string }) {
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
-                    className="absolute right-0 mt-3 w-44 bg-white rounded-xl shadow-xl border border-zinc-200 overflow-hidden"
+                    className="absolute right-0 mt-3 w-44 bg-white rounded-xl shadow-xl border border-zinc-200 overflow-hidden cursor-pointer"
                   >
-                    <button className="w-full text-left px-4 py-3 text-sm hover:bg-zinc-100">
+                    <button
+                      className="w-full text-left px-4 py-3 text-sm hover:bg-zinc-100"
+                      onClick={handleRedirectToDashboard}
+                    >
                       Dashboard
                     </button>
                     <button
@@ -113,7 +122,7 @@ export default function HomeClient({ email }: { email: string }) {
             <div className="mt-10 flex gap-4">
               <button
                 className="px-7 py-3 rounded-xl bg-black text-white font-medium hover:bg-zinc-800 transition disabled:opacity-60 cursor-pointer"
-                onClick={email ? handleLogin: handleLogin }
+                onClick={email ? handleRedirectToDashboard : handleLogin}
               >
                 {email ? "Go to Dashboard" : "Get Started"}
               </button>
@@ -166,7 +175,7 @@ export default function HomeClient({ email }: { email: string }) {
             transition={{ duration: 0.5 }}
             className="text-3xl font-semibold text-center"
           >
-            Why Businesses Choose SupportAI
+            Why Businesses Choose SnippetAI
           </motion.h2>
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-10">
             {features.map((feature, index) => (
@@ -188,7 +197,7 @@ export default function HomeClient({ email }: { email: string }) {
         </div>
       </section>
       <footer className="py-10 text-center text-sm text-zinc-500">
-        &copy; {new Date().getFullYear()} SupportAI. All rights reserved.
+        &copy; {new Date().getFullYear()} SnippetAI. All rights reserved.
       </footer>
     </div>
   );
