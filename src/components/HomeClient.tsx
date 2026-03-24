@@ -16,9 +16,9 @@ export default function HomeClient({ email }: { email: string }) {
     const handler = (e: MouseEvent) => {
       if (popupRef.current && !popupRef.current.contains(e.target as Node))
         setOpen(false);
-      document.addEventListener("mousedown", handler);
-      return () => document.removeEventListener("mousedown", handler);
     };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   const features = [
@@ -76,7 +76,7 @@ export default function HomeClient({ email }: { email: string }) {
                       Dashboard
                     </button>
                     <button
-                      onClick={() => handleLogout}
+                      onClick={handleLogout}
                       className="w-full text-left block px-4 py-3 text-sm text-red-600 hover:bg-zinc-100"
                     >
                       Logout
@@ -112,8 +112,8 @@ export default function HomeClient({ email }: { email: string }) {
             </p>
             <div className="mt-10 flex gap-4">
               <button
-                className="px-7 py-3 rounded-xl bg-black text-white font-medium hover:bg-zinc-800 transition disabled:opacity-60"
-                onClick={() => (email ? {} : { handleLogin })}
+                className="px-7 py-3 rounded-xl bg-black text-white font-medium hover:bg-zinc-800 transition disabled:opacity-60 cursor-pointer"
+                onClick={email ? handleLogin: handleLogin }
               >
                 {email ? "Go to Dashboard" : "Get Started"}
               </button>
