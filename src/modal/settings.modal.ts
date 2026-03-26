@@ -1,22 +1,20 @@
 import mongoose, { model, Schema } from "mongoose";
 
 interface settingsInterface {
-  ownerID: string;
-  bussinessName: string;
+  ownerId: string;
+  businessName: string;
   supportEmail: string;
-  knowledge: {
-    text?: string;
-    pdfUrl?: string;
-  };
+  knowledge: string;
 }
 
 const settingsSchema = new Schema<settingsInterface>(
   {
-    ownerID: {
+    ownerId: {
       type: String,
       required: true,
+      unique: true
     },
-    bussinessName: {
+    businessName: {
       type: String,
       required: true,
     },
@@ -25,16 +23,12 @@ const settingsSchema = new Schema<settingsInterface>(
       required: true,
     },
     knowledge: {
-      text: {
-        type: String,
-      },
-      pdfUrl: {
-        type: String,
-      },
+      type: String,
+      required: true,
     },
   },
   { timestamps: true },
 );
 
-const Settings = mongoose.models.Settings || model("Settings, settingsSchema");
+const Settings = mongoose.models.Settings || model("Settings", settingsSchema);
 export default Settings;

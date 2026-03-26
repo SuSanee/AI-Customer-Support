@@ -3,7 +3,6 @@
 import axios from "axios";
 import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { title } from "process";
 import { useEffect, useRef, useState } from "react";
 
 export default function HomeClient({ email }: { email: string }) {
@@ -117,7 +116,7 @@ export default function HomeClient({ email }: { email: string }) {
             </h1>
             <p className="mt-6 text-lg text-zinc-600 max-w-xl">
               Add a powerful AI chatbot to your website in minutes. Let your
-              customers get instant answers using your own bussiness knowledge.
+              customers get instant answers using your own business knowledge.
             </p>
             <div className="mt-10 flex gap-4">
               <button
