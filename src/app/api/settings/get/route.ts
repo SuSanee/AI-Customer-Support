@@ -2,7 +2,7 @@ import connectDB from "@/lib/db";
 import Settings from "@/modal/settings.modal";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
     const { ownerId } = await req.json();
 
