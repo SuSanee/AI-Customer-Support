@@ -5,6 +5,8 @@ interface settingsInterface {
   businessName: string;
   supportEmail: string;
   knowledge: string;
+  pdfText: string;
+  pdfName: string;
 }
 
 const settingsSchema = new Schema<settingsInterface>(
@@ -25,6 +27,14 @@ const settingsSchema = new Schema<settingsInterface>(
     knowledge: {
       type: String,
       required: true,
+    },
+    pdfText: {
+      type: String,
+      default: "",
+    },
+    pdfName: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true },

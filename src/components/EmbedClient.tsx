@@ -101,7 +101,7 @@ function EmbedClient({ ownerId }: { ownerId: string }) {
                   animate={{ y: [0, -8, 0] }}
                   transition={{ repeat: Infinity, duration: 3 }}
                   className="absolute bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white flex items-center justify-center shadow-2xl cursor-pointer"
-                ></motion.div>
+                >🤖</motion.div>
               </div>
             </div>
           </div>

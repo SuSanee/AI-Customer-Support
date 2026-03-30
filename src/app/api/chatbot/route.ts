@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
     const businessName = setting.businessName;
     const supportEmail = setting.supportEmail;
     const knowledge = setting.knowledge;
+    const pdfText = setting.pdfText || "";
 
     const prompt = `You are an AI-powered customer support assistant for a business.
 
@@ -78,6 +79,9 @@ If the user asks something outside your knowledge:
 ==============================
 Business Name: ${businessName}
 knowledge: ${knowledge}
+${pdfText ? `
+Additional Document Context:
+${pdfText}` : ""}
 
 ==============================
 Customer Question
@@ -91,8 +95,9 @@ Always represent the business in a helpful and trustworthy manner.`;
       model: "gemini-2.5-flash",
       contents: prompt,
     });
+    const reply = res.text ?? "Sorry, I couldn't generate a response.";
 
-    const response = NextResponse.json(res);
+    const response = NextResponse.json({ reply });
     response.headers.set("Access-Control-Allow-Origin", "*");
     response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
     response.headers.set("Access-Control-Allow-Headers", "Content-Type");

@@ -2,7 +2,7 @@
 import axios from "axios";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function DashboardClient({ ownerId }: { ownerId: string }) {
   const navigate = useRouter();
@@ -14,16 +14,28 @@ export default function DashboardClient({ ownerId }: { ownerId: string }) {
   const [knowledge, setKnowledge] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [saved, setsaved] = useState(false);
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [pdfName, setPdfName] = useState<string>("");
+  const [removePdf, setRemovePdf] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSettings = async () => {
     setLoading(true);
     try {
-      const result = await axios.post("/api/settings", {
-        ownerId,
-        businessName,
-        supportEmail,
-        knowledge,
-      });
+      const formData = new FormData();
+      formData.append("ownerId", ownerId);
+      formData.append("businessName", businessName);
+      formData.append("supportEmail", supportEmail);
+      formData.append("knowledge", knowledge);
+      if (removePdf) formData.append("removePdf", "true");
+      if (pdfFile) formData.append("pdf", pdfFile);
+
+      const result = await axios.post("/api/settings", formData);
+      if (result.data.pdfName) setPdfName(result.data.pdfName);
+      if (removePdf) setPdfName("");
+      setRemovePdf(false);
+      setPdfFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
       setsaved(true);
       setTimeout(() => setsaved(false), 3000);
     } catch (error) {
@@ -47,6 +59,7 @@ export default function DashboardClient({ ownerId }: { ownerId: string }) {
         setBusinessName(result.data.businessName);
         setSupportEmail(result.data.supportEmail);
         setKnowledge(result.data.knowledge);
+        setPdfName(result.data.pdfName || "");
       } catch (error) {
         console.error(error);
       }
@@ -117,6 +130,53 @@ export default function DashboardClient({ ownerId }: { ownerId: string }) {
                 value={knowledge}
               />
             </div>
+          </div>
+          <div className="mb-10">
+            <h2 className="text-lg font-medium mb-2">PDF Document</h2>
+            <p className="text-sm text-zinc-500 mb-4">
+              Upload a PDF to give your chatbot deeper context (max 5MB, 1 file)
+            </p>
+            {(pdfName && !removePdf) || pdfFile ? (
+              <div className="flex items-center gap-3 p-4 rounded-xl border border-zinc-200 bg-zinc-50">
+                <span className="text-xl">📄</span>
+                <span className="text-sm flex-1 truncate">
+                  {pdfFile ? pdfFile.name : pdfName}
+                </span>
+                <button
+                  type="button"
+                  className="text-red-500 text-sm font-medium hover:underline cursor-pointer"
+                  onClick={() => {
+                    setPdfFile(null);
+                    setRemovePdf(true);
+                    if (fileInputRef.current) fileInputRef.current.value = "";
+                  }}
+                >
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center gap-2 p-8 rounded-xl border-2 border-dashed border-zinc-300 bg-zinc-50 hover:bg-zinc-100 cursor-pointer transition">
+                <span className="text-3xl">📎</span>
+                <span className="text-sm text-zinc-500">Click to upload a PDF</span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      if (file.size > 5 * 1024 * 1024) {
+                        alert("PDF must be under 5MB");
+                        return;
+                      }
+                      setPdfFile(file);
+                      setRemovePdf(false);
+                    }
+                  }}
+                />
+              </label>
+            )}
           </div>
           <div className="flex items-center gap-5">
             <motion.button

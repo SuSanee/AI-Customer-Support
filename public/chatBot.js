@@ -158,8 +158,7 @@
 
       const data = await response.json();
       messageArea.removeChild(typing);
-      const reply = data?.response?.candidates?.[0]?.content?.parts?.[0]?.text || "Something went wrong";
-      addMessage(reply, "ai");
+      addMessage(data.reply || "Something went wrong", "ai");
     } catch (error) {
       messageArea.removeChild(typing);
       addMessage("Something went wrong", "ai");
