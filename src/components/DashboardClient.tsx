@@ -33,6 +33,10 @@ export default function DashboardClient({ ownerId }: { ownerId: string }) {
     }
   };
 
+  const navigateChatbot = () => {
+    navigate.push("/embed")
+  }
+
   useEffect(() => {
     if (!ownerId) return;
     const handleGetDetails = async () => {
@@ -64,7 +68,7 @@ export default function DashboardClient({ ownerId }: { ownerId: string }) {
           >
             Snippet <span className="text-zinc-400">AI</span>
           </div>
-          <button className="px-4 py-2 rounded-lg border border-zinc-300 text-sm hover:bg-zinc-100 transition">
+          <button className="px-4 py-2 rounded-lg border border-zinc-300 text-sm hover:bg-zinc-100 transition" onClick={navigateChatbot}>
             Embed ChatBot
           </button>
         </div>

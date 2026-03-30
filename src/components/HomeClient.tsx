@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function HomeClient({ email }: { email: string }) {
+  const [loading, setLoading] = useState(false);
   const handleLogin = () => {
+    setLoading(true);
     window.location.href = "/api/auth/login";
   };
   const firstLetter = email ? email[0].toUpperCase() : null;
@@ -97,8 +99,9 @@ export default function HomeClient({ email }: { email: string }) {
             <motion.button
               onClick={handleLogin}
               className="px-5 py-2 rounded-full bg-black text-white text-sm font-medium hover:bg-zinc-800 transition disabled:opacity-60 flex items-center gap-2"
+              disabled={loading}
             >
-              Login
+              {loading ? "Loading..." : "Login"}
             </motion.button>
           )}
         </div>
