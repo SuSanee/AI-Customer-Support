@@ -13,7 +13,7 @@ function EmbedClient({ ownerId }: { ownerId: string }) {
     navigate.push("/dashboard");
   };
   const embedCode = `<script 
-  src="${process.env.NEXT_PUBLIC_APP_URL}/chatBot.js" 
+  src="${process.env.NEXT_PUBLIC_URL}/chatBot.js" 
   data-owner-id="${ownerId}">
 </script>`;
   const copyCode = () => {
@@ -30,7 +30,7 @@ function EmbedClient({ ownerId }: { ownerId: string }) {
             className="text-lg font-semibold cursor-pointer"
             onClick={navigateHome}
           >
-            Support<span className="text-zinc-400">AI</span>
+            Snippet<span className="text-zinc-400">AI</span>
           </div>
           <button
             className="px-4 py-2 rounded-lg border border-zinc-300 text-sm hover:bg-zinc-100 transition"

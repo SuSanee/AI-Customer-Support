@@ -1,6 +1,7 @@
 (function () {
-  const api_url = "http://localhost:3000/api/chat";
   const scriptTag = document.currentScript;
+  const scriptSrc = scriptTag?.src || "";
+  const api_url = scriptSrc ? new URL("/api/chatbot", scriptSrc).href : "/api/chatbot";
 
   const ownerId = scriptTag.getAttribute("data-owner-id");
 
@@ -31,7 +32,7 @@
   document.body.appendChild(button);
 
   const box = document.createElement("div");
-  Object.assign(div.style, {
+  Object.assign(box.style, {
     position: "fixed",
     bottom: "90px",
     right: "24px",
@@ -44,7 +45,7 @@
     boxShadow: "0 25px 60px rgba(0, 0, 0, 0.25)",
     zIndex: "999999",
     overflow: "hidden",
-    fontFamily: "Inter, syste,-ui, sans-serif",
+    fontFamily: "Inter, system-ui, sans-serif",
   });
   box.innerHTML = /* html */ `<div style="background:#000;
     color:#fff;
@@ -87,7 +88,7 @@
   border-radius:8px;
   font-size:13px;
   cursor:pointer;
-">
+">Send</button>
 </div>
 `;
   document.body.appendChild(box);
@@ -157,10 +158,11 @@
 
       const data = await response.json();
       messageArea.removeChild(typing);
-      addMessage(data || "Something went wrong", "ai");
+      const reply = data?.response?.candidates?.[0]?.content?.parts?.[0]?.text || "Something went wrong";
+      addMessage(reply, "ai");
     } catch (error) {
       messageArea.removeChild(typing);
-      addMessage(data || "Something went wrong", "ai");
+      addMessage("Something went wrong", "ai");
     }
   };
 })();
