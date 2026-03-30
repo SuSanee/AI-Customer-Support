@@ -23,7 +23,6 @@ export default function DashboardClient({ ownerId }: { ownerId: string }) {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("ownerId", ownerId);
       formData.append("businessName", businessName);
       formData.append("supportEmail", supportEmail);
       formData.append("knowledge", knowledge);
@@ -50,12 +49,9 @@ export default function DashboardClient({ ownerId }: { ownerId: string }) {
   }
 
   useEffect(() => {
-    if (!ownerId) return;
     const handleGetDetails = async () => {
       try {
-        const result = await axios.post("/api/settings/get", {
-          ownerId,
-        });
+        const result = await axios.get("/api/settings/get");
         setBusinessName(result.data.businessName);
         setSupportEmail(result.data.supportEmail);
         setKnowledge(result.data.knowledge);

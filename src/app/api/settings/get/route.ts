@@ -1,17 +1,19 @@
 import connectDB from "@/lib/db";
+import { getSession } from "@/lib/getSession";
 import Settings from "@/modal/settings.modal";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function GET() {
   try {
-    const { ownerId } = await req.json();
-
-    if (!ownerId) {
+    const session = await getSession();
+    if (!session?.user?.id) {
       return NextResponse.json(
-        { message: "owner id is required" },
-        { status: 400 },
+        { message: "Unauthorized" },
+        { status: 401 },
       );
     }
+    const ownerId = session.user.id;
+
     await connectDB();
     const settings = await Settings.findOne({ ownerId });
     return NextResponse.json(settings);
